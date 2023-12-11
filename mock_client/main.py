@@ -1,6 +1,7 @@
 import json
 import random
 import sys
+import threading
 from datetime import time
 from time import sleep
 import requests
@@ -21,16 +22,19 @@ def post(delay):
         string = generate_string()
         data = {"str": string}
         try:
-            resp = requests.post(url="http://web/api/data/", data=json.dumps(data))
+            resp = requests.post(url="http://web:8001/api/data/", data=json.dumps(data))
+            print(resp.status_code)
         except Exception as e:
             print(e)
         # print(string + "sent")
-        print(resp.status_code)
+
         sleep(delay)
 
 
 delay = int(sys.argv[1])
 counter = int(sys.argv[2])
 
-with ThreadPoolExecutor(max_workers=counter) as executor:
-    executor.map(post, [delay for i in range(counter)])
+#with ThreadPoolExecutor(max_workers=counter) as executor:
+#    executor.map(post, [delay for i in range(counter)])
+for i in range(counter):
+    threading.Thread(target=post, args=(delay,)).start()

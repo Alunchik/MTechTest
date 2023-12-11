@@ -41,12 +41,12 @@ def log_to_file(path):
 
 
 def get_data():
-    data = requests.get(url = "http://web/api/data/")
+    data = requests.get(url = "http://web:8001/api/data/")
     print(data.status_code)
     return data.json()
 
 def get_data_after_datetime(created):
-    data = requests.get(url = "http://web/api/data/" , params={'created':created})
+    data = requests.get(url = "http://web:8001/api/data/" , params={'created':created})
     print(data.status_code)
     return data.json()
 
