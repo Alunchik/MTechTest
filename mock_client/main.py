@@ -1,3 +1,4 @@
+import json
 import random
 import sys
 from datetime import time
@@ -18,17 +19,14 @@ def generate_string():
 
 def post(delay):
     while True:
-        data = generate_string()
-        print(1)
-        resp = requests.post(url="http://127.0.0.1:8000/api/data/", data={"str": '\"' + data + '\"'})
-        print(resp.status_code)
-        print(resp.json())
-        print(data + " sent")
+        string = generate_string()
+        data = {"str": string}
+        resp = requests.post(url="http://127.0.0.1:8000/api/data/", data=json.dumps(data))
+        print(string + " sent")
         sleep(delay)
 
 
 delay = int(sys.argv[1])
-
 counter = int(sys.argv[2])
 
 with ThreadPoolExecutor(max_workers=counter) as executor:

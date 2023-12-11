@@ -16,7 +16,7 @@ from .models import ResponseBody
 def upload_data(request):
     if request.method=='POST':
         try:
-            data = json.loads()
+            data = json.loads(request.body)
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
         request_str_list= utils.getResponseBody(data['str'])
