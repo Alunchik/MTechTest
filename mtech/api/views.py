@@ -27,7 +27,14 @@ def upload_data(request):
 def get_data(request):
     if request.GET.get('method'):
         return get_data_by_method(request.GET.get('method'))
+    if request.GET.get('created'):
+        return get_data_after_datetime(request.GET.get('created'))
     return get_all()
+
+
+def get_data_after_datetime(cerated):  # записи добавленные после определенного времени
+    data = obj = ResponseBody.objects.filter(created__gt=cerated).values()
+    return JsonResponse(list(obj), status=200, safe=False)
 
 def get_data_by_method(method):
     data = obj = ResponseBody.objects.filter(method=method).values()
