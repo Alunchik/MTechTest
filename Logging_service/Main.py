@@ -41,14 +41,15 @@ def log_to_file(path):
 
 
 def get_data():
-    data = requests.get(url = "http://127.0.0.1:8000/api/data/")
+    data = requests.get(url = "http://web/api/data/")
+
     return data.json()
 
 def get_data_after_datetime(created):
-    data = requests.get(url = "http://127.0.0.1:8000/api/data/" , params={'created':created})
+    data = requests.get(url = "http://web/api/data/" , params={'created':created})
     return data.json()
 
 
 while True:
-    save_file('./')
+    save_file('./logs/')
     sleep(10)

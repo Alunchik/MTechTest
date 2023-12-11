@@ -3,7 +3,6 @@ import random
 import sys
 from datetime import time
 from time import sleep
-
 import requests
 from concurrent.futures import Executor, ThreadPoolExecutor
 
@@ -21,7 +20,10 @@ def post(delay):
     while True:
         string = generate_string()
         data = {"str": string}
-        resp = requests.post(url="http://127.0.0.1:8000/api/data/", data=json.dumps(data))
+        try:
+            resp = requests.post(url="http://web/api/data/", data=json.dumps(data))
+        except Exception as e:
+            print(e)
         print(string + " sent")
         sleep(delay)
 

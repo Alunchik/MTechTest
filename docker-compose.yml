@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  web:
+    build: ./mtech
+   # command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    links:
+     - db
+    depends_on:
+      - db
+  db:
+    image: postgres:16.0
+    environment:
+      POSTGRES_DB: mtech
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+  logger:
+    build: ./Logging_service
+    volumes:
+      - ./logs:/app/logs
+    links:
+      - web
+    depends_on:
+      - client
+  client:
+    build: ./mock_client
+    links:
+      - web
+    depends_on:
+      - web
+

@@ -119,10 +119,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mtech',       # Имя базы данных
-        'USER': 'postgres',   # Имя пользователя
-        'PASSWORD': 'admin',   # Пароль
-        'HOST': 'localhost',               # Имя хоста, заданное в docker-compose.yml
-        'PORT': '5432',             # Порт
+        'NAME': 'mtech',
+        'USER': 'postgres',
+        'PASSWORD': 'admin',
+        'HOST': 'db',               # Имя хоста, заданное в docker-compose.yml
+        'PORT': '5432',
     }
 }
