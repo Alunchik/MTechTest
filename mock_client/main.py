@@ -24,7 +24,8 @@ def post(delay):
             resp = requests.post(url="http://web/api/data/", data=json.dumps(data))
         except Exception as e:
             print(e)
-        print(string + " sent")
+        # print(string + "sent")
+        print(resp.status_code)
         sleep(delay)
 
 

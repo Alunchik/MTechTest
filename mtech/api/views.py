@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 
-from asgiref.sync import sync_to_async
+from asgiref.sync import sync_to_async, async_to_sync
 from django.contrib.postgres import serializers
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
@@ -14,17 +14,18 @@ from .models import ResponseBody
 
 # Create your views here.
 
+@sync_to_async()
 def upload_data(request):
     if request.method=='POST':
         try:
             data = json.loads(request.body)
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
-        request_str_list= utils.getResponseBody(data['str'])
+        request_str_list = utils.getResponseBody(data['str'])
         ResponseBody.objects.create(created=datetime.now(), ip=request_str_list[0],
     method=request_str_list[1], uri=request_str_list[2], statuscode=request_str_list[3]) #сохраняем объект в базу данных
         return HttpResponse(status=200)
-
+@sync_to_async()
 def get_data(request):
     if request.GET.get('method'):
         return get_data_by_method(request.GET.get('method'))
@@ -34,20 +35,20 @@ def get_data(request):
 
 
 def get_data_after_datetime(cerated):  # записи добавленные после определенного времени
-    data = obj = ResponseBody.objects.filter(created__gt=cerated).values()
+    obj = ResponseBody.objects.filter(created__gt=cerated).values()
     return JsonResponse(list(obj), status=200, safe=False)
 
 def get_data_by_method(method):
-    data = obj = ResponseBody.objects.filter(method=method).values()
+    obj = ResponseBody.objects.filter(method=method).values()
     return JsonResponse(list(obj), status=200, safe=False)
 
 def get_all():
-    data = obj = ResponseBody.objects.all().values()
+    obj = ResponseBody.objects.all().values()
     return JsonResponse(list(obj), status=200, safe=False)
 
 @csrf_exempt
-def data(request):
+async def data(request):
     if request.method == 'POST':
-        return upload_data(request)
+        return await upload_data(request)
     else:
-        return get_data(request)
+        return await get_data(request)
