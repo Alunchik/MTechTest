@@ -11,7 +11,7 @@ def save_file(path):
         pass
     else:
         try:
-            with open(path + "log.lock", 'w+'):
+            with open(path + "log.lock", 'a+'):
                 if (path == './'):
                     filepath = "log"
                 else:
@@ -20,24 +20,22 @@ def save_file(path):
         except Exception as e:
             print(e)
         finally:
-            os.remove(path + "log.lock")
+            if(os.path.exists(path + "log.lock")):
+                os.remove(path + "log.lock")
 
 def log_to_file(path):
     last_line = None
-
     if os.path.exists(path):
         with open(path, 'r') as file:
             lines = file.readlines()
-            if len(lines)>0:
-                last_line = file.readlines()[-1]
-    with open(path, 'w+') as file: # если файл есть, пишем в него, если нет, создаем
+            if len(lines) > 0:
+                last_line = lines[-1]
+    with open(path, 'a+') as file: # если файл есть, пишем в него, если нет, создаем
         if last_line is None: # если нет никакой предыдущей информации или файл вообще не создан, получаем все строки
             data = get_data()
         else:
             last = last_line.split(' ')[0]
             data = get_data_after_datetime(last)  # иначе смотрим, когда была добавлена последняя запись, и получаем от сервера только те, которые были после нее
-            print(data)
-        print(data)
         for elem in data:
             file.write(' '.join((elem['created'], str(elem['id']), elem['ip'], elem['method'], elem['uri'], str(elem['statuscode']), '\n')))
 

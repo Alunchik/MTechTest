@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 
+from asgiref.sync import sync_to_async
 from django.contrib.postgres import serializers
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
